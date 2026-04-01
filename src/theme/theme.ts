@@ -4,23 +4,23 @@ export const appTheme = createTheme({
   palette: {
     mode: 'light',
     primary: {
-      main: '#0d9488',
-      dark: '#0f766e',
-      light: '#2dd4bf',
+      main: '#111827',
+      dark: '#030712',
+      light: '#374151',
       contrastText: '#ffffff',
     },
     secondary: {
-      main: '#475569',
-      light: '#64748b',
-      dark: '#334155',
+      main: '#6b7280',
+      light: '#9ca3af',
+      dark: '#4b5563',
     },
     background: {
-      default: '#f1f5f9',
+      default: '#f5f5f4',
       paper: '#ffffff',
     },
     text: {
-      primary: '#0f172a',
-      secondary: '#475569',
+      primary: '#111827',
+      secondary: '#6b7280',
     },
     error: {
       main: '#dc2626',
@@ -30,8 +30,7 @@ export const appTheme = createTheme({
     },
   },
   typography: {
-    fontFamily:
-      '"DM Sans", "Segoe UI", system-ui, -apple-system, sans-serif',
+    fontFamily: '"Manrope", "Segoe UI", system-ui, sans-serif',
     h1: { fontWeight: 700, letterSpacing: '-0.02em' },
     h2: { fontWeight: 700, letterSpacing: '-0.02em' },
     h3: { fontWeight: 600 },
@@ -39,20 +38,14 @@ export const appTheme = createTheme({
     button: { textTransform: 'none', fontWeight: 600 },
   },
   shape: {
-    borderRadius: 12,
+    borderRadius: 10,
   },
   components: {
     MuiButton: {
       styleOverrides: {
         root: {
-          borderRadius: 10,
-          paddingInline: 20,
-        },
-        containedPrimary: {
-          boxShadow: '0 4px 14px rgba(13, 148, 136, 0.35)',
-          '&:hover': {
-            boxShadow: '0 6px 20px rgba(13, 148, 136, 0.45)',
-          },
+          borderRadius: 8,
+          paddingInline: 18,
         },
       },
     },
@@ -60,12 +53,21 @@ export const appTheme = createTheme({
       styleOverrides: {
         root: {
           backgroundImage: 'none',
+          boxShadow: 'none',
+          border: '1px solid #e5e7eb',
         },
       },
     },
     MuiTextField: {
       defaultProps: {
         variant: 'outlined',
+      },
+    },
+    MuiOutlinedInput: {
+      styleOverrides: {
+        root: {
+          backgroundColor: '#ffffff',
+        },
       },
     },
   },

@@ -1,10 +1,8 @@
 import { useEffect, useState, type ReactNode } from 'react'
 import { Link as RouterLink } from 'react-router-dom'
 import {
-  AppBar,
   Box,
   Button,
-  Chip,
   Container,
   Divider,
   Link,
@@ -16,7 +14,6 @@ import {
   TableContainer,
   TableHead,
   TableRow,
-  Toolbar,
   Typography,
 } from '@mui/material'
 import { listSessions } from '../api/authApi'
@@ -44,36 +41,32 @@ export default function DashboardPage() {
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default' }}>
-      <AppBar
-        position="sticky"
-        elevation={0}
-        sx={{
-          bgcolor: 'rgba(255,255,255,0.85)',
-          backdropFilter: 'blur(8px)',
-          borderBottom: '1px solid',
-          borderColor: 'rgba(15, 23, 42, 0.08)',
-        }}
-      >
-        <Toolbar sx={{ gap: 2 }}>
-          <Typography variant="h6" fontWeight={700} sx={{ flexGrow: 1 }}>
-            Dashboard
-          </Typography>
-          <Chip
-            label={user?.role ?? '—'}
-            size="small"
-            color="primary"
-            variant="outlined"
-          />
-          <Button component={RouterLink} to="/" color="inherit">
-            Home
-          </Button>
-          <Button variant="outlined" color="secondary" onClick={() => logout()}>
-            Sign out
-          </Button>
-        </Toolbar>
-      </AppBar>
-
       <Container maxWidth="md" sx={{ py: 4 }}>
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          justifyContent="space-between"
+          alignItems={{ xs: 'flex-start', sm: 'center' }}
+          spacing={2}
+          sx={{ mb: 3 }}
+        >
+          <Box>
+            <Typography variant="h4" fontWeight={700}>
+              Dashboard
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Signed in as {user?.email ?? 'unknown user'}
+            </Typography>
+          </Box>
+          <Stack direction="row" spacing={1.5}>
+            <Button component={RouterLink} to="/" color="inherit">
+              Home
+            </Button>
+            <Button variant="outlined" onClick={() => logout()}>
+              Sign out
+            </Button>
+          </Stack>
+        </Stack>
+
         <Paper sx={{ p: 3, mb: 3 }}>
           <Typography variant="h5" gutterBottom>
             Profile
@@ -89,6 +82,9 @@ export default function DashboardPage() {
               <strong>Email:</strong> {user?.email}
             </Typography>
             <Typography variant="body2" color="text.secondary">
+              Role: {user?.role ?? '-'}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
               Created: {user?.createdAt}
             </Typography>
             <Typography variant="body2" color="text.secondary">
@@ -102,15 +98,13 @@ export default function DashboardPage() {
             Password &amp; security
           </Typography>
           <Typography variant="body2" color="text.secondary" paragraph>
-            Change your password while signed in, or reset it with an email code
-            if you forgot it.
+            Change your password or continue with the email reset flow.
           </Typography>
           <Stack spacing={1.5} sx={{ maxWidth: 420 }}>
             <Button
               component={RouterLink}
               to="/change-password"
               variant="contained"
-              color="primary"
               startIcon={<KeySvg />}
               sx={{ justifyContent: 'flex-start' }}
             >
@@ -121,7 +115,6 @@ export default function DashboardPage() {
               to="/forgot-password"
               state={{ email: user?.email ?? '' }}
               variant="outlined"
-              color="secondary"
               startIcon={<LockResetSvg />}
               sx={{ justifyContent: 'flex-start' }}
             >
@@ -132,7 +125,6 @@ export default function DashboardPage() {
               to="/reset-password"
               state={{ email: user?.email ?? '' }}
               variant="outlined"
-              color="secondary"
               startIcon={<LockResetSvg />}
               sx={{ justifyContent: 'flex-start' }}
             >
@@ -174,7 +166,7 @@ export default function DashboardPage() {
           )}
           {!sessionsError && sessions === null && (
             <Typography variant="body2" color="text.secondary">
-              Loading…
+              Loading...
             </Typography>
           )}
           {sessions && sessions.length === 0 && (
