@@ -17,8 +17,9 @@ import {
   Typography,
 } from '@mui/material'
 import LogoutControl from '../components/LogoutControl'
+import TwoFactorToggle from '../components/TwoFactorToggle'
 import { listSessions } from '../api/authApi'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/useAuth'
 import type { SessionResponse } from '../types/auth'
 
 export default function DashboardPage() {
@@ -90,6 +91,8 @@ export default function DashboardPage() {
               Updated: {user?.updatedAt}
             </Typography>
           </Stack>
+          <Divider sx={{ my: 2.5 }} />
+          <TwoFactorToggle />
         </Paper>
 
         <Paper sx={{ p: 3, mb: 3 }}>

@@ -14,7 +14,7 @@ import {
 } from '@mui/material'
 import { changePassword } from '../api/authApi'
 import LogoutControl from '../components/LogoutControl'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/useAuth'
 import { getApiErrorMessage } from '../lib/apiError'
 
 export default function ChangePasswordPage() {

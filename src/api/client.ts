@@ -27,6 +27,7 @@ const NO_BEARER_PREFIXES = [
   '/api/auth/forgot-password',
   '/api/auth/reset-password',
   '/api/auth/verify-email',
+  '/api/auth/verify-login-2fa',
   '/api/auth/resend-verification-otp',
   '/api/auth/request-account-unlock',
   '/api/auth/unlock-account',

@@ -1,7 +1,7 @@
 import { Alert, Box, Button, Container, Stack, Typography } from '@mui/material'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 import LogoutControl from '../components/LogoutControl'
-import { useAuth } from '../context/AuthContext'
+import { useAuth } from '../context/useAuth'
 
 const steps = [
   'Create an account',

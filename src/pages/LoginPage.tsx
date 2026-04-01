@@ -12,7 +12,13 @@ import {
   Typography,
 } from '@mui/material'
 import AuthLayout from '../components/AuthLayout'
-import { useAuth } from '../context/AuthContext'
+import {
+  LOGIN_2FA_CHALLENGE_KEY,
+  LOGIN_2FA_EMAIL_KEY,
+  LOGIN_2FA_META_KEY,
+  LOGIN_2FA_REDIRECT_KEY,
+} from '../constants/storage'
+import { useAuth } from '../context/useAuth'
 import { getApiErrorMessage } from '../lib/apiError'
 
 export default function LoginPage() {
@@ -33,23 +39,64 @@ export default function LoginPage() {
   const pwdOk = password.length >= 8 && password.length <= 72
   const canSubmit = emailOk && pwdOk && !loading
 
+  const clearTwoFactorChallenge = () => {
+    sessionStorage.removeItem(LOGIN_2FA_EMAIL_KEY)
+    sessionStorage.removeItem(LOGIN_2FA_CHALLENGE_KEY)
+    sessionStorage.removeItem(LOGIN_2FA_META_KEY)
+    sessionStorage.removeItem(LOGIN_2FA_REDIRECT_KEY)
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setError(null)
+    clearTwoFactorChallenge()
     if (!emailOk || !pwdOk) {
-      setError('Enter a valid email and password (8–72 characters).')
+      setError('Enter a valid email and password (8-72 characters).')
       return
     }
     setLoading(true)
     try {
-      await login(email.trim(), password)
-      navigate(from, { replace: true })
+      const response = await login(email.trim(), password)
+      if (response.twoFactorChallengeToken) {
+        sessionStorage.setItem(LOGIN_2FA_EMAIL_KEY, email.trim())
+        sessionStorage.setItem(
+          LOGIN_2FA_CHALLENGE_KEY,
+          response.twoFactorChallengeToken,
+        )
+        sessionStorage.setItem(
+          LOGIN_2FA_META_KEY,
+          JSON.stringify({
+            otpExpiresInSeconds: response.twoFactorExpiresInSeconds ?? 300,
+            resendAvailableInSeconds:
+              response.twoFactorResendAvailableInSeconds ?? 0,
+          }),
+        )
+        sessionStorage.setItem(LOGIN_2FA_REDIRECT_KEY, from)
+        navigate('/login-2fa', { replace: true })
+      } else if (response.accessToken && response.refreshToken) {
+        clearTwoFactorChallenge()
+        navigate(from, { replace: true })
+      } else {
+        setError(response.message || 'Could not complete sign-in.')
+      }
     } catch (err) {
       if (err instanceof AxiosError) {
         const status = err.response?.status
         if (status === 401) {
+          setError(getApiErrorMessage(err, 'Invalid email or password.'))
+        } else if (status === 403) {
           setError(
-            getApiErrorMessage(err, 'Invalid email or password.'),
+            getApiErrorMessage(
+              err,
+              'Verify your email address before signing in.',
+            ),
+          )
+        } else if (status === 423) {
+          setError(
+            getApiErrorMessage(
+              err,
+              'Your account is temporarily locked. Please wait and try again.',
+            ),
           )
         } else if (status === 429) {
           setError(
@@ -72,7 +119,7 @@ export default function LoginPage() {
   return (
     <AuthLayout
       title="Welcome back"
-      subtitle="Sign in with the email and password you used to register."
+      subtitle="Sign in with your password. If login 2FA is enabled, we'll ask for a short email code next."
       footer={
         <Typography variant="body2" color="text.secondary" sx={{ mt: 3 }}>
           New here?{' '}

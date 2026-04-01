@@ -21,6 +21,18 @@ export interface LoginRequest {
   deviceId?: string
 }
 
+export interface AuthenticationResponse {
+  authenticationStatus?: string
+  message?: string
+  accessToken?: string
+  refreshToken?: string
+  tokenType?: string
+  expiresInSeconds?: number
+  twoFactorChallengeToken?: string
+  twoFactorExpiresInSeconds?: number
+  twoFactorResendAvailableInSeconds?: number
+}
+
 export interface LoginResponse {
   accessToken: string
   refreshToken: string
@@ -76,6 +88,17 @@ export interface PasswordChangeRequest {
   deviceId?: string
 }
 
+export interface TwoFactorUpdateRequest {
+  currentPassword: string
+  deviceId?: string
+}
+
+export interface TwoFactorStatusResponse {
+  enabled: boolean
+  enabledAt?: string | null
+  message: string
+}
+
 export interface DeleteAccountRequest {
   currentPassword: string
   confirmEmail: string
@@ -92,6 +115,11 @@ export interface GlobalLogoutResponse {
   accessTokensInvalidatedAt: string
 }
 
+export interface VerifyLoginTwoFactorRequest {
+  challengeToken: string
+  otp: string
+}
+
 export interface UserProfileResponse {
   id: string
   fullName: string
@@ -99,6 +127,8 @@ export interface UserProfileResponse {
   role: 'USER' | 'ADMIN'
   createdAt: string
   updatedAt: string
+  twoFactorEnabled?: boolean
+  twoFactorEnabledAt?: string | null
 }
 
 export interface SessionResponse {

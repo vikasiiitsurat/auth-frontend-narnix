@@ -1,11 +1,11 @@
 import { apiClient } from './client'
 import { getDeviceId } from '../lib/deviceId'
 import type {
+  AuthenticationResponse,
   DeleteAccountRequest,
   EmailVerificationStatusResponse,
   ForgotPasswordRequest,
   LoginRequest,
-  LoginResponse,
   GlobalLogoutResponse,
   LogoutRequest,
   PasswordChangeRequest,
@@ -14,9 +14,12 @@ import type {
   RegisterResponse,
   ResendVerificationOtpRequest,
   ResetPasswordRequest,
+  TwoFactorStatusResponse,
+  TwoFactorUpdateRequest,
   SessionResponse,
   UserProfileResponse,
   VerifyEmailOtpRequest,
+  VerifyLoginTwoFactorRequest,
 } from '../types/auth'
 
 export const registerUser = async (
@@ -31,11 +34,21 @@ export const registerUser = async (
 
 export const login = async (
   payload: LoginRequest,
-): Promise<LoginResponse> => {
-  const { data } = await apiClient.post<LoginResponse>('/api/auth/login', {
+): Promise<AuthenticationResponse> => {
+  const { data } = await apiClient.post<AuthenticationResponse>('/api/auth/login', {
     ...payload,
     deviceId: payload.deviceId ?? getDeviceId(),
   })
+  return data
+}
+
+export const verifyLoginTwoFactor = async (
+  payload: VerifyLoginTwoFactorRequest,
+): Promise<AuthenticationResponse> => {
+  const { data } = await apiClient.post<AuthenticationResponse>(
+    '/api/auth/verify-login-2fa',
+    payload,
+  )
   return data
 }
 
@@ -88,6 +101,32 @@ export const changePassword = async (
     ...payload,
     deviceId: payload.deviceId ?? getDeviceId(),
   })
+}
+
+export const enableTwoFactor = async (
+  payload: TwoFactorUpdateRequest,
+): Promise<TwoFactorStatusResponse> => {
+  const { data } = await apiClient.post<TwoFactorStatusResponse>(
+    '/api/users/me/2fa/enable',
+    {
+      ...payload,
+      deviceId: payload.deviceId ?? getDeviceId(),
+    },
+  )
+  return data
+}
+
+export const disableTwoFactor = async (
+  payload: TwoFactorUpdateRequest,
+): Promise<TwoFactorStatusResponse> => {
+  const { data } = await apiClient.post<TwoFactorStatusResponse>(
+    '/api/users/me/2fa/disable',
+    {
+      ...payload,
+      deviceId: payload.deviceId ?? getDeviceId(),
+    },
+  )
+  return data
 }
 
 export const deleteMyAccount = async (
