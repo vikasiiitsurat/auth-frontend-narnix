@@ -6,6 +6,7 @@ import type {
   ForgotPasswordRequest,
   LoginRequest,
   LoginResponse,
+  GlobalLogoutResponse,
   LogoutRequest,
   PasswordChangeRequest,
   PasswordResetRequestResponse,
@@ -100,6 +101,11 @@ export const deleteMyAccount = async (
 
 export const logout = async (payload: LogoutRequest): Promise<void> => {
   await apiClient.post('/api/auth/logout', payload)
+}
+
+export const logoutAll = async (): Promise<GlobalLogoutResponse> => {
+  const { data } = await apiClient.post<GlobalLogoutResponse>('/api/auth/logout-all')
+  return data
 }
 
 export const fetchCurrentUser = async (): Promise<UserProfileResponse> => {

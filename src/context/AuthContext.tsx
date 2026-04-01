@@ -14,13 +14,18 @@ import {
 } from '../api/client'
 import * as authApi from '../api/authApi'
 import { AUTH_SESSION_KEY } from '../constants/storage'
-import type { LoginResponse, UserProfileResponse } from '../types/auth'
+import type {
+  GlobalLogoutResponse,
+  LoginResponse,
+  UserProfileResponse,
+} from '../types/auth'
 
 type AuthContextValue = {
   user: UserProfileResponse | null
   loading: boolean
   login: (email: string, password: string) => Promise<void>
   logout: () => Promise<void>
+  logoutEverywhere: () => Promise<GlobalLogoutResponse>
   /** Clears tokens and user without calling the API (e.g. after password change invalidates the session). */
   clearSession: () => void
   refreshUser: () => Promise<void>
@@ -67,6 +72,13 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
     setUser(null)
   }, [])
 
+  const logoutEverywhere = useCallback(async () => {
+    const response = await authApi.logoutAll()
+    clearPersistedSession()
+    setUser(null)
+    return response
+  }, [])
+
   const clearSession = useCallback(() => {
     clearPersistedSession()
     setUser(null)
@@ -78,10 +90,11 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       loading,
       login,
       logout,
+      logoutEverywhere,
       clearSession,
       refreshUser,
     }),
-    [user, loading, login, logout, clearSession, refreshUser],
+    [user, loading, login, logout, logoutEverywhere, clearSession, refreshUser],
   )
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>

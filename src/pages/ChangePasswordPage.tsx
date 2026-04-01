@@ -6,12 +6,14 @@ import {
   Box,
   Button,
   CircularProgress,
+  Container,
   Paper,
   Stack,
   TextField,
   Typography,
 } from '@mui/material'
 import { changePassword } from '../api/authApi'
+import LogoutControl from '../components/LogoutControl'
 import { useAuth } from '../context/AuthContext'
 import { getApiErrorMessage } from '../lib/apiError'
 
@@ -74,11 +76,31 @@ export default function ChangePasswordPage() {
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', py: 4 }}>
-      <Box sx={{ maxWidth: 480, mx: 'auto', px: 2 }}>
+      <Container maxWidth="sm">
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          justifyContent="space-between"
+          alignItems={{ xs: 'flex-start', sm: 'center' }}
+          spacing={2}
+          sx={{ mb: 3 }}
+        >
+          <Box>
+            <Typography variant="h5" fontWeight={700}>
+              Change password
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Update your password and review account access.
+            </Typography>
+          </Box>
+          <Stack direction="row" spacing={1.5}>
+            <Button component={RouterLink} to="/dashboard" color="inherit">
+              Dashboard
+            </Button>
+            <LogoutControl />
+          </Stack>
+        </Stack>
+
         <Paper sx={{ p: 3 }}>
-          <Typography variant="h5" fontWeight={700} gutterBottom>
-            Change password
-          </Typography>
           <Typography variant="body2" color="text.secondary" paragraph>
             Updates your password and signs out other devices. You will need to
             sign in again on this device.
@@ -151,7 +173,7 @@ export default function ChangePasswordPage() {
             Forgot password? Use email reset instead
           </RouterLink>
         </Typography>
-      </Box>
+      </Container>
     </Box>
   )
 }

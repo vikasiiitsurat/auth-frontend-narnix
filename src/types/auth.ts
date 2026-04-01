@@ -86,6 +86,12 @@ export interface LogoutRequest {
   refreshToken?: string
 }
 
+export interface GlobalLogoutResponse {
+  message: string
+  revokedSessions: number
+  accessTokensInvalidatedAt: string
+}
+
 export interface UserProfileResponse {
   id: string
   fullName: string

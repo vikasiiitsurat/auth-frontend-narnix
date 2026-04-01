@@ -6,12 +6,14 @@ import {
   Box,
   Button,
   CircularProgress,
+  Container,
   Paper,
   Stack,
   TextField,
   Typography,
 } from '@mui/material'
 import { deleteMyAccount } from '../api/authApi'
+import LogoutControl from '../components/LogoutControl'
 import { useAuth } from '../context/AuthContext'
 import { getApiErrorMessage } from '../lib/apiError'
 
@@ -82,7 +84,30 @@ export default function DeleteAccountPage() {
 
   return (
     <Box sx={{ minHeight: '100vh', bgcolor: 'background.default', py: 4 }}>
-      <Box sx={{ maxWidth: 480, mx: 'auto', px: 2 }}>
+      <Container maxWidth="sm">
+        <Stack
+          direction={{ xs: 'column', sm: 'row' }}
+          justifyContent="space-between"
+          alignItems={{ xs: 'flex-start', sm: 'center' }}
+          spacing={2}
+          sx={{ mb: 3 }}
+        >
+          <Box>
+            <Typography variant="h5" fontWeight={700} color="error.dark">
+              Delete account
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              Permanently remove this account and end all sessions.
+            </Typography>
+          </Box>
+          <Stack direction="row" spacing={1.5}>
+            <Button component={RouterLink} to="/dashboard" color="inherit">
+              Dashboard
+            </Button>
+            <LogoutControl />
+          </Stack>
+        </Stack>
+
         <Paper
           sx={{
             p: 3,
@@ -91,9 +116,6 @@ export default function DeleteAccountPage() {
             bgcolor: 'rgba(220, 38, 38, 0.04)',
           }}
         >
-          <Typography variant="h5" fontWeight={700} gutterBottom color="error.dark">
-            Delete account
-          </Typography>
           <Typography variant="body2" color="text.secondary" paragraph>
             This soft-deletes your account, revokes sessions, and signs you out.
             This cannot be undone from this screen.
@@ -155,7 +177,7 @@ export default function DeleteAccountPage() {
             </Stack>
           </Box>
         </Paper>
-      </Box>
+      </Container>
     </Box>
   )
 }

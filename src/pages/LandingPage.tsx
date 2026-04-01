@@ -1,5 +1,6 @@
 import { Alert, Box, Button, Container, Stack, Typography } from '@mui/material'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
+import LogoutControl from '../components/LogoutControl'
 import { useAuth } from '../context/AuthContext'
 
 const steps = [
@@ -52,9 +53,12 @@ export default function LandingPage() {
 
           <Stack direction="row" spacing={1}>
             {!loading && user ? (
-              <Button component={RouterLink} to="/dashboard" variant="contained">
-                Open dashboard
-              </Button>
+              <>
+                <Button component={RouterLink} to="/dashboard" variant="contained">
+                  Open dashboard
+                </Button>
+                <LogoutControl />
+              </>
             ) : (
               <>
                 <Button component={RouterLink} to="/login" color="inherit">

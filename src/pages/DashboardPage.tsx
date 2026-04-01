@@ -16,12 +16,13 @@ import {
   TableRow,
   Typography,
 } from '@mui/material'
+import LogoutControl from '../components/LogoutControl'
 import { listSessions } from '../api/authApi'
 import { useAuth } from '../context/AuthContext'
 import type { SessionResponse } from '../types/auth'
 
 export default function DashboardPage() {
-  const { user, logout } = useAuth()
+  const { user } = useAuth()
   const [sessions, setSessions] = useState<SessionResponse[] | null>(null)
   const [sessionsError, setSessionsError] = useState<string | null>(null)
 
@@ -61,9 +62,7 @@ export default function DashboardPage() {
             <Button component={RouterLink} to="/" color="inherit">
               Home
             </Button>
-            <Button variant="outlined" onClick={() => logout()}>
-              Sign out
-            </Button>
+            <LogoutControl />
           </Stack>
         </Stack>
 
