@@ -218,7 +218,7 @@ export default function LandingPage() {
                 fontSize: { xs: '3rem', sm: '4rem', lg: '4.7rem' },
                 lineHeight: { xs: 1.02, sm: 1.03 },
                 letterSpacing: '-0.07em',
-                fontWeight: 800,
+                fontWeight: 650,
                 color: brandColors.primaryDark,
               }}
             >
