@@ -5,6 +5,7 @@ import {
   Alert,
   Box,
   Button,
+  type ButtonProps,
   CircularProgress,
   Dialog,
   DialogActions,
@@ -22,6 +23,7 @@ type LogoutControlProps = {
   color?: 'inherit' | 'primary' | 'secondary'
   size?: 'small' | 'medium' | 'large'
   label?: string
+  sx?: ButtonProps['sx']
 }
 
 export default function LogoutControl({
@@ -29,6 +31,7 @@ export default function LogoutControl({
   color = 'inherit',
   size = 'medium',
   label = 'Sign out',
+  sx,
 }: LogoutControlProps) {
   const navigate = useNavigate()
   const { logout, logoutEverywhere } = useAuth()
@@ -103,6 +106,7 @@ export default function LogoutControl({
         variant={variant}
         color={color}
         size={size}
+        sx={sx}
         onClick={() => setOpen(true)}
       >
         {label}
